@@ -1,0 +1,5 @@
+# Temporal Python SDK
+temporalio==1.5.1
+
+# Additional dependencies for logging and async support
+asyncio-mqtt==0.16.1
