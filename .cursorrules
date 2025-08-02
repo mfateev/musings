@@ -2,6 +2,8 @@
 
 This repository contains documentation and explanations of Temporal.io concepts, patterns, and best practices.
 
+Do not provide explanation of the agent output. Just produce the output.
+
 ## Context and Terminology
 
 - **Workflows, Activities, Services**: By default, all references to these terms refer to Temporal concepts unless explicitly stated otherwise
