@@ -1,0 +1,33 @@
+# Cursor Rules for Temporal.io Documentation Repository
+
+This repository contains documentation and explanations of Temporal.io concepts, patterns, and best practices.
+
+## Context and Terminology
+
+- **Workflows, Activities, Services**: By default, all references to these terms refer to Temporal concepts unless explicitly stated otherwise
+- **Workflow**: A Temporal Workflow function that defines the orchestration logic
+- **Activity**: A Temporal Activity function that performs a single, well-defined action
+- **Service**: Typically refers to Temporal Services or Worker Services in the Temporal ecosystem
+
+## Repository Purpose
+
+This repository focuses on:
+- Explaining Temporal.io concepts and patterns
+- Providing documentation for Temporal workflows and activities
+- Demonstrating best practices for Temporal application development
+- Creating examples and tutorials for Temporal.io usage
+
+## Code and Content Guidelines
+
+- When discussing distributed systems concepts, assume Temporal context unless specified
+- Use Temporal terminology consistently throughout documentation
+- Examples should demonstrate Temporal SDK usage and patterns
+- Focus on practical, real-world Temporal use cases
+- Maintain clarity between Temporal-specific concepts and general distributed systems concepts
+
+## Temporal-Specific Context
+
+- Assume familiarity with Temporal's execution model (deterministic workflows, replay, etc.)
+- Reference Temporal SDK features and capabilities
+- Consider Temporal's guarantees (reliability, scalability, visibility)
+- Keep in mind Temporal's workflow and activity lifecycle management
