@@ -44,24 +44,24 @@ sequenceDiagram
     rect rgb(255, 240, 240)
         Note over TS: ⏰ Activity Timeout (30 seconds)<br/>start_to_close_timeout exceeded
         TS->>TS: Mark activity as TIMED_OUT
+        TS->>TS: Schedule activity retry (Attempt 2)
+
     end
     
     W->>W: Activity still processing...
     W--X TS: Activity completion ignored (timeout already occurred)
     
-    Note over TS: Activity marked as failed due to timeout
     
     rect rgb(240, 255, 240)
         Note over TS: Retry Policy Active<br/>initial_interval: 1s, maximum_attempts: 3
-        
-        TS->>TS: Schedule activity retry (Attempt 2)
+        W->>+TS: long-poll PollActivityTaskQueue
         TS->>+W: ActivityTask (say_hello, Attempt: 2)
         W->>W: Execute say_hello("Temporal") - Retry
         W->>W: Complete quickly this time
         W-->>-TS: CompleteActivityTask(Result: "Hello Temporal!")
     end
     
-    TS->>+W: WorkflowTask (Continue with activity result)
+    TS->>+W: WorkflowTask (ActivityTaskCompletedEvent)
     W->>W: Process result and complete workflow
     W-->>-TS: CompleteWorkflowTask(Commands: [CompleteWorkflowExecution])
     
@@ -72,7 +72,7 @@ sequenceDiagram
 
 **What Happens:**
 1. **Timeout Detection**: Temporal tracks activity execution time against `start_to_close_timeout`
-2. **Automatic Failure**: Activity is marked as failed when timeout is exceeded
+2. **Automatic Failure**: Activity task is marked as failed when timeout is exceeded
 3. **Retry Logic**: Retry policy determines if activity should be retried
 4. **Worker Handling**: Worker may still be processing the original task (which gets ignored)
 
@@ -130,10 +130,7 @@ sequenceDiagram
     
     Note over W: Worker becomes unavailable<br/>(busy with other tasks or disconnected)
     
-    loop Activity Task Waiting
-        TS->>TS: Activity task queued<br/>Waiting for available worker
-        Note over TS: No workers polling activity task queue
-    end
+    Note over TS: No workers polling activity task queue
     
     rect rgb(255, 240, 240)
         Note over TS: Activity Schedule-To-Start Timeout<br/>(if configured)
@@ -145,15 +142,9 @@ sequenceDiagram
         
         W->>+TS: long-poll PollActivityTaskQueue
         
-        alt Activity not yet timed out
-            TS->>+W: ActivityTask (say_hello)
-            W->>W: Execute say_hello("Temporal")
-            W-->>-TS: CompleteActivityTask(Result: "Hello Temporal!")
-        else Activity timed out - retry scheduled
-            TS->>+W: ActivityTask (say_hello, Attempt: 2)
-            W->>W: Execute say_hello("Temporal") - Retry
-            W-->>-TS: CompleteActivityTask(Result: "Hello Temporal!")
-        end
+        TS->>+W: ActivityTask (say_hello)
+        W->>W: Execute say_hello("Temporal")
+        W-->>-TS: CompleteActivityTask(Result: "Hello Temporal!")
     end
     
     TS->>+W: WorkflowTask (Continue workflow)
@@ -224,7 +215,7 @@ sequenceDiagram
     
     W-->>-TS: CompleteActivityTask(FAILED)<br/>Error: "API call failed: 500 Internal Server Error"
     
-    Note over TS: Activity marked as FAILED
+    Note over TS: Activity task marked as FAILED
     
     rect rgb(240, 255, 240)
         Note over TS: Retry Policy Evaluation<br/>Attempt 1 failed, retry scheduled

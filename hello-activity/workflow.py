@@ -51,7 +51,7 @@ class HelloActivityWorkflow:
             ),
         )
         
-        # Get current time for formatting
+        # Must use workflow.now() instead of datetime.now() inside a workflow
         current_time = workflow.now().strftime("%Y-%m-%d %H:%M:%S")
         
         # Call the second activity to format the message
