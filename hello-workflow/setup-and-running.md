@@ -23,7 +23,7 @@ This guide provides step-by-step instructions for setting up and running the Tem
 
 2. **Start the Worker** (in a separate terminal):
    ```bash
-   cd python-hello-world
+   cd hello-workflow
    python worker.py
    ```
    
@@ -36,7 +36,7 @@ This guide provides step-by-step instructions for setting up and running the Tem
 
 3. **Run the Starter** (in another terminal):
    ```bash
-   cd python-hello-world
+   cd hello-workflow
    python starter.py
    ```
    
