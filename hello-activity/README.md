@@ -102,6 +102,8 @@ To run this sample immediately, see the **[Setup and Running Guide](setup-and-ru
 
 ### Workflow Orchestration
 - **Activity Execution**: `workflow.execute_activity()` to call activities
+- **Single Arguments**: Pass single argument directly: `workflow.execute_activity(activity_fn, arg)`
+- **Multiple Arguments**: Pass multiple arguments as list: `workflow.execute_activity(activity_fn, args=[arg1, arg2])`
 - **Timeout Configuration**: `start_to_close_timeout` for activity execution limits
 - **Retry Policies**: Configure retry behavior for failed activities
 - **Deterministic Time**: Use `workflow.now()` instead of `datetime.now()`

@@ -6,6 +6,7 @@ This module defines a Temporal workflow that calls activities to perform busines
 
 from datetime import datetime, timedelta
 from temporalio import workflow
+from temporalio.common import RetryPolicy
 
 from activities import say_hello, format_message
 
@@ -43,7 +44,7 @@ class HelloActivityWorkflow:
             say_hello,
             name,
             start_to_close_timeout=timedelta(seconds=30),
-            retry_policy=workflow.RetryPolicy(
+            retry_policy=RetryPolicy(
                 initial_interval=timedelta(seconds=1),
                 maximum_interval=timedelta(seconds=10),
                 maximum_attempts=3,
@@ -56,10 +57,9 @@ class HelloActivityWorkflow:
         # Call the second activity to format the message
         formatted_message = await workflow.execute_activity(
             format_message,
-            greeting,
-            current_time,
+            args=[greeting, current_time],
             start_to_close_timeout=timedelta(seconds=15),
-            retry_policy=workflow.RetryPolicy(
+            retry_policy=RetryPolicy(
                 initial_interval=timedelta(seconds=1),
                 maximum_interval=timedelta(seconds=5),
                 maximum_attempts=2,

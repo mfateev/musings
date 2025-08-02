@@ -78,14 +78,28 @@ sequenceDiagram
 
 **Configuration:**
 ```python
+from temporalio.common import RetryPolicy
+
+# Single argument activity
 await workflow.execute_activity(
     say_hello,
     name,
     start_to_close_timeout=timedelta(seconds=30),  # Activity timeout
-    retry_policy=workflow.RetryPolicy(
+    retry_policy=RetryPolicy(
         initial_interval=timedelta(seconds=1),
         maximum_interval=timedelta(seconds=10),
         maximum_attempts=3,
+    ),
+)
+
+# Multiple arguments activity
+await workflow.execute_activity(
+    format_message,
+    args=[greeting, timestamp],  # Multiple args as list
+    start_to_close_timeout=timedelta(seconds=15),
+    retry_policy=RetryPolicy(
+        initial_interval=timedelta(seconds=1),
+        maximum_attempts=2,
     ),
 )
 ```
@@ -159,11 +173,17 @@ sequenceDiagram
 
 **Configuration:**
 ```python
+from temporalio.common import RetryPolicy
+
 await workflow.execute_activity(
     say_hello,
     name,
     schedule_to_start_timeout=timedelta(minutes=5),  # Queue timeout
     start_to_close_timeout=timedelta(seconds=30),    # Execution timeout
+    retry_policy=RetryPolicy(
+        initial_interval=timedelta(seconds=1),
+        maximum_attempts=3,
+    ),
 )
 ```
 
@@ -330,11 +350,17 @@ async def long_running_activity(data: str) -> str:
     return "Processing completed!"
 
 # Workflow configuration
+from temporalio.common import RetryPolicy
+
 await workflow.execute_activity(
     long_running_activity,
     data,
     start_to_close_timeout=timedelta(minutes=10),
     heartbeat_timeout=timedelta(seconds=30),  # Heartbeat timeout
+    retry_policy=RetryPolicy(
+        initial_interval=timedelta(seconds=2),
+        maximum_attempts=2,
+    ),
 )
 ```
 
