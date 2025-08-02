@@ -29,10 +29,10 @@ This guide provides step-by-step instructions for setting up and running the Tem
    
    You should see output indicating the worker is polling for tasks:
    ```
-   INFO:__main__:Starting worker for HelloActivityWorkflow and activities...
+   INFO:__main__:Starting worker for HelloActivityWorkflow and activity...
    INFO:__main__:Task queue: hello-activity-task-queue
    INFO:__main__:Registered workflows: HelloActivityWorkflow
-   INFO:__main__:Registered activities: say_hello, format_message
+   INFO:__main__:Registered activities: say_hello
    INFO:__main__:Press Ctrl+C to stop the worker
    ```
 
@@ -57,9 +57,7 @@ During execution, you'll see activity logs in the worker terminal:
 
 ```
 INFO:activities:Activity started: generating greeting for 'Temporal'
-INFO:activities:Activity completed: generated greeting 'Hello Temporal!'
-INFO:activities:Activity started: formatting message
-INFO:activities:Activity completed: formatted message 'Hello Temporal! (Generated at 2024-01-15 10:30:45)'
+INFO:activities:Activity completed: generated greeting 'Hello Temporal! (Generated at 2024-01-15 10:30:45)'
 ```
 
 ## Temporal Web UI

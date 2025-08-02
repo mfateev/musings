@@ -10,20 +10,18 @@ This sample demonstrates Temporal workflow patterns using Python with activities
 ## Components
 
 ### 1. Activities (`activities.py`)
-- **say_hello**: Generates a personalized greeting message with simulated processing time
-- **format_message**: Formats the greeting with a timestamp
+- **say_hello**: Generates a personalized greeting message with timestamp and simulated processing time
 - Demonstrates activity heartbeat for long-running operations
 - Shows proper logging and error handling patterns
 
 ### 2. Workflow (`workflow.py`)
-- **HelloActivityWorkflow**: Orchestrates calls to activities in sequence
+- **HelloActivityWorkflow**: Orchestrates a call to the say_hello activity
 - Demonstrates activity configuration (timeouts, retry policies)
-- Shows how to pass data between activities
-- Uses `workflow.now()` for deterministic time handling
+
 
 ### 3. Worker (`worker.py`)
 - Connects to the Temporal service
-- Registers both the workflow and activities
+- Registers both the workflow and activity
 - Polls the `hello-activity-task-queue` for both workflow and activity tasks
 - Can execute workflow orchestration and activity business logic
 
@@ -63,16 +61,6 @@ sequenceDiagram
     W-->>-TS: CompleteActivityTask(Result:"Hello Temporal!")
     
     TS->>+W: WorkflowTask<br/>(Continue workflow with activity result)
-    W->>W: Process activity result
-    W->>W: Schedule format_message activity  
-    W-->>-TS: CompleteWorkflowTask(Commands:[<br/>ScheduleActivityTask(format_message, "Hello Temporal!", timestamp)<br/>])
-    
-    TS->>+W: ActivityTask<br/>(format_message, Inputs: greeting, timestamp)
-    W->>W: Execute format_message(greeting, timestamp)
-    W->>W: return formatted message
-    W-->>-TS: CompleteActivityTask(Result: formatted message)
-    
-    TS->>+W: WorkflowTask<br/>(Continue workflow with final result)
     W->>W: Complete workflow execution
     W-->>-TS: CompleteWorkflowTask(Commands:[<br/>CompleteWorkflowExecution(Result: formatted message)<br/>])
     
@@ -103,10 +91,9 @@ To run this sample immediately, see the **[Setup and Running Guide](setup-and-ru
 ### Workflow Orchestration
 - **Activity Execution**: `workflow.execute_activity()` to call activities
 - **Single Arguments**: Pass single argument directly: `workflow.execute_activity(activity_fn, arg)`
-- **Multiple Arguments**: Pass multiple arguments as list: `workflow.execute_activity(activity_fn, args=[arg1, arg2])`
 - **Timeout Configuration**: `start_to_close_timeout` for activity execution limits
 - **Retry Policies**: Configure retry behavior for failed activities
-- **Deterministic Time**: Use `workflow.now()` instead of `datetime.now()`
+- **Deterministic vs Non-Deterministic**: Workflows handle orchestration, activities handle business logic
 
 ### Worker Registration
 - **Multiple Registration**: Workers can register both workflows and activities

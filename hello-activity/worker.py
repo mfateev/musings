@@ -11,7 +11,7 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 
 from workflow import HelloActivityWorkflow
-from activities import say_hello, format_message
+from activities import say_hello
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -35,13 +35,13 @@ async def main():
         client,
         task_queue="hello-activity-task-queue",
         workflows=[HelloActivityWorkflow],
-        activities=[say_hello, format_message],
+        activities=[say_hello],
     )
     
-    logger.info("Starting worker for HelloActivityWorkflow and activities...")
+    logger.info("Starting worker for HelloActivityWorkflow and activity...")
     logger.info("Task queue: hello-activity-task-queue")
     logger.info("Registered workflows: HelloActivityWorkflow")
-    logger.info("Registered activities: say_hello, format_message")
+    logger.info("Registered activities: say_hello")
     logger.info("Press Ctrl+C to stop the worker")
     
     # Run worker until interrupted

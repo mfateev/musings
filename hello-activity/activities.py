@@ -8,6 +8,7 @@ They are expected to be idempotent.
 
 import asyncio
 import logging
+from datetime import datetime
 from temporalio import activity
 
 # Configure logging
@@ -17,27 +18,16 @@ logger = logging.getLogger(__name__)
 
 @activity.defn
 async def say_hello(name: str) -> str:
-
     logger.info(f"Activity started: generating greeting for '{name}'")
     
     # Simulate some processing time
     await asyncio.sleep(2)
     
-    # Generate the greeting
-    greeting = f"Hello {name}!"
+    # Get current time (this is allowed in activities, not workflows)
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Generate the greeting with timestamp
+    greeting = f"Hello {name}! (Generated at {current_time})"
     
     logger.info(f"Activity completed: generated greeting '{greeting}'")
     return greeting
-
-
-@activity.defn
-async def format_message(greeting: str, timestamp: str) -> str:
-    logger.info(f"Activity started: formatting message")
-    
-    # Simulate processing
-    await asyncio.sleep(1)
-    
-    formatted = f"{greeting} (Generated at {timestamp})"
-    
-    logger.info(f"Activity completed: formatted message '{formatted}'")
-    return formatted

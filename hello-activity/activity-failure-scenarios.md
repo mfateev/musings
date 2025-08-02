@@ -80,7 +80,6 @@ sequenceDiagram
 ```python
 from temporalio.common import RetryPolicy
 
-# Single argument activity
 await workflow.execute_activity(
     say_hello,
     name,
@@ -89,17 +88,6 @@ await workflow.execute_activity(
         initial_interval=timedelta(seconds=1),
         maximum_interval=timedelta(seconds=10),
         maximum_attempts=3,
-    ),
-)
-
-# Multiple arguments activity
-await workflow.execute_activity(
-    format_message,
-    args=[greeting, timestamp],  # Multiple args as list
-    start_to_close_timeout=timedelta(seconds=15),
-    retry_policy=RetryPolicy(
-        initial_interval=timedelta(seconds=1),
-        maximum_attempts=2,
     ),
 )
 ```
@@ -257,7 +245,10 @@ async def say_hello(name: str) -> str:
     try:
         # Simulate external API call that might fail
         response = await call_external_greeting_api(name)
-        return f"Hello {response.greeting}!"
+        
+        # Get current time (allowed in activities)
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return f"Hello {response.greeting}! (Generated at {current_time})"
         
     except requests.HTTPError as e:
         logger.error(f"API call failed: {e}")
