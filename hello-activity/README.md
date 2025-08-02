@@ -76,6 +76,7 @@ This sample includes several documentation files explaining different aspects of
 
 ### 📚 Core Documentation
 - **[Setup and Running Guide](setup-and-running.md)** - Step-by-step instructions for running this sample
+- **[History Events](history-events.md)** - Detailed explanation of workflow and activity history events and their relationship to execution flow
 - **[Activity Failure Scenarios](activity-failure-scenarios.md)** - Analysis of activity-specific failure scenarios and how Temporal handles them
 
 ### 🚀 Quick Start
