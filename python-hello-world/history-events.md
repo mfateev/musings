@@ -29,6 +29,14 @@ sequenceDiagram
     TS-->>-S: Return result: "Hello Temporal!"
 ```
 
+## Event Definitions Source
+
+All Temporal history events are formally defined in the Temporal API protobuf definitions. The complete source of truth for all event types, their attributes, and structure can be found at:
+
+**[https://github.com/temporalio/api/blob/master/temporal/api/history/v1/message.proto](https://github.com/temporalio/api/blob/master/temporal/api/history/v1/message.proto)**
+
+This protobuf file contains the canonical definitions for all history event types, including the specific attributes and data structures used in each event. When working with history events programmatically or debugging workflow issues, this file serves as the authoritative reference.
+
 ## History Events Generated
 
 For each step in the sequence diagram above, Temporal generates corresponding history events. Here's the complete history for our HelloWorld workflow execution:
